@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from Maze_Generator import Maze
 import pygame
-class Solution_Visualizer:
+class Depth_First_Search:
 	def __init__(self, maze):
 		self.maze = maze
 		self.solutionStack = []
@@ -59,24 +59,3 @@ class Solution_Visualizer:
 				self.solutionStack.pop()
 				self.maze.currentCell = self.solutionStack[-1]
 		self.maze.endCell.color = self.maze.blue
-
-game = Maze(10)
-pygame.init()
-pygame.mixer.init
-pygame.display.set_caption("Maze Generator")
-isRunning = True
-visualizer = Solution_Visualizer(game)
-visualizer.depth_first_search()
-
-game.draw_maze()
-while isRunning:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-            	isRunning = False  
-            
-            # KEYBOARD EVENTS
-            if event.type == pygame.KEYDOWN:
-            	# escape key
-            	if event.key == pygame.K_ESCAPE:
-            		isRunning = False
-        pygame.display.update()

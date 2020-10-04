@@ -168,21 +168,3 @@ class Maze:
 		for r in self.cellList:
 			for c in r:
 				pygame.draw.rect(self.pygameScreen, c.color, (c.x*(1000/self.rows), c.y*(1000/self.cols), c.width, c.width))
-
-
-'''
-# Pygame startup
-game = Maze(50)
-pygame.init()
-pygame.mixer.init
-pygame.display.set_caption("Maze Generator")
-isRunning = True
-game.draw_maze()
-print("done")
-while isRunning:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-            	isRunning = False  
-
-        pygame.display.flip()
-'''
