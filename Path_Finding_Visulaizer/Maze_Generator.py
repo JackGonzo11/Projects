@@ -21,6 +21,7 @@ class Maze:
 		self.blue = (0, 0, 255)
 		self.yellow = (255, 255, 0)
 		self.black = (0, 0, 0)
+		self.red = (255, 0, 0)
 
 		# define the Maze variables
 		self.rows = r
@@ -38,7 +39,7 @@ class Maze:
 	# Function that moves the current cell up
 	def move_left(self, cell):
 		if(cell.x > 0) and (self.cellList[cell.x-1][cell.y].isVisited == False):					# (checks to make sure the current cell isnt on the far left) and (if the cell to the left has been visited)
-				self.cellList[cell.x-1][cell.y].color = self.white									# sets the cell to the left as a path
+				self.cellList[cell.x-1][cell.y].color = self.white
 				if(cell.y != self.rows-1) and (self.cellList[cell.x][cell.y+1].isVisited == False):	# (checks to see if the cell is on the bottom row) and (checks if the cell below has been visited)
 						self.cellList[cell.x][cell.y+1].isVisited = True							# Marks the cell below as visited
 						self.numCellsVisited += 1													# increment numCellsVisited
@@ -49,7 +50,6 @@ class Maze:
 						self.cellList[cell.x][cell.y-1].isVisited = True							# marks the cell above as visited
 						self.numCellsVisited += 1													# increment numCellsVisited
 						self.cellList[cell.x][cell.y-1].isWall = True								# makes the cell above a wall
-						self.cellList[cell.x][cell.y-1].solutionVisited = True
 				self.currentCell = self.cellList[cell.x-1][cell.y]									# moves current cell to cell to the left
 				self.stack.append(self.currentCell)													# append current cell to stack
 				self.currentCell.isVisited = True													# mark cell as visited
@@ -58,7 +58,7 @@ class Maze:
 	# Function that moves the current cell left
 	def move_up(self, cell):
 		if(cell.y > 0) and (self.cellList[cell.x][cell.y-1].isVisited == False):					# (checks to see if the cell is on the top row) and (checks if the cell above has been visited)
-				self.cellList[cell.x][cell.y-1].color = self.white									# sets the cell above as a path
+				self.cellList[cell.x][cell.y-1].color = self.white
 				if(cell.x != 0) and (self.cellList[cell.x-1][cell.y].isVisited == False):			# (checks to see if the cell is on the left side) and (checks to see if the cell to the left is visited)
 						self.cellList[cell.x-1][cell.y].isVisited = True							# marks cell to the left as visited
 						self.numCellsVisited += 1													# increment numCellsVisited
@@ -77,8 +77,8 @@ class Maze:
 
 	# Function that moves the current cell down
 	def move_right(self,cell):
-		if(cell.x < self.cols-1) and (self.cellList[cell.x+1][cell.y].isVisited == False):			# (checks to see if the cell is on the far ride side) and (checks to see if the cell to the right has been visited)				
-				self.cellList[cell.x+1][cell.y].color = self.white									# sets the cell to the right as a path
+		if(cell.x < self.cols-1) and (self.cellList[cell.x+1][cell.y].isVisited == False):			# (checks to see if the cell is on the far ride side) and (checks to see if the cell to the right has been visited)
+				self.cellList[cell.x+1][cell.y].color = self.white	
 				if(cell.y != 0) and (self.cellList[cell.x][cell.y-1].isVisited == False):			# (checks if the cell is on the top row) and (checks if the cell above is visited)
 						self.cellList[cell.x][cell.y-1].isVisited = True							# marks cell above as visited
 						self.numCellsVisited += 1													# increment numCellsVisited
@@ -97,8 +97,8 @@ class Maze:
 
 	# Function that moves the current cell right
 	def move_down(self, cell):
-		if(cell.y < self.rows-1) and (self.cellList[cell.x][cell.y+1].isVisited == False):			# (checks if the cell is on bottom row) and (checks if the cell below has been visited)				
-				self.cellList[cell.x][cell.y+1].color = self.white									# sets the cell below as a path
+		if(cell.y < self.rows-1) and (self.cellList[cell.x][cell.y+1].isVisited == False):			# (checks if the cell is on bottom row) and (checks if the cell below has been visited)	
+				self.cellList[cell.x][cell.y+1].color = self.white
 				if(cell.x != 0) and (self.cellList[cell.x-1][cell.y].isVisited == False):			# (checks if the cell is on the far left side) and (checks if the cell to the left is visited)
 						self.cellList[cell.x-1][cell.y].isVisited = True							# marks cell to the left as visited
 						self.numCellsVisited += 1													# increment numCellsVisited
@@ -132,6 +132,17 @@ class Maze:
 	def check_finished(self):
 		return self.numCellsVisited < self.rows*self.cols*.98
 	
+	#initializes adjacencies of each cell
+	def set_adjacenties(self, cell):
+		if(cell.x != self.cols-1) and (not self.cellList[cell.x+1][cell.y].isWall): # right
+			cell.adjacent.append(self.cellList[cell.x+1][cell.y])
+		if(cell.x != 0) and (not self.cellList[cell.x-1][cell.y].isWall): # left
+			cell.adjacent.append(self.cellList[cell.x-1][cell.y])
+		if(cell.y != self.rows-1) and (not self.cellList[cell.x][cell.y+1].isWall): # down
+			cell.adjacent.append(self.cellList[cell.x][cell.y+1])
+		if(cell.y != 0) and (not self.cellList[cell.x][cell.y-1].isWall): # above
+			cell.adjacent.append(self.cellList[cell.x][cell.y-1])
+	
 	# Initializes all of the cells and creates a path
 	def create_maze(self):
 		self.currentCell.color = self.green				# specify starting cell
@@ -162,9 +173,15 @@ class Maze:
 			elif(randomNum == 3):
 				self.move_left(self.currentCell)
 				self.move_left(self.currentCell)
+
+		for r in self.cellList:
+			for c in r:
+				if(c.isWall == False):
+					self.set_adjacenties(c)
 	# draws the maze using the pygame module
 	def draw_maze(self):
 
 		for r in self.cellList:
 			for c in r:
-				pygame.draw.rect(self.pygameScreen, c.color, (c.x*(1000/self.rows), c.y*(1000/self.cols), c.width, c.width))
+				if (c.isWall == False):
+					pygame.draw.rect(self.pygameScreen, c.color, (c.x*(1000/self.rows), c.y*(1000/self.cols), c.width, c.width))

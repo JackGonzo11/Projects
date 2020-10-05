@@ -9,7 +9,6 @@ pygame.mixer.init
 pygame.display.set_caption("Maze Generator")
 isRunning = True
 game.draw_maze()
-print("done")
 while isRunning:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
