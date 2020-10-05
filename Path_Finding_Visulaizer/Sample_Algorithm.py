@@ -14,7 +14,7 @@ isRunning = True
 #visualizer = Depth_First_Search(game)
 #visualizer.depth_first_search()
 
-visualizer = Dijkstra(game)
+visualizer = AStar(game)
 
 game.draw_maze()
 while isRunning:

@@ -9,6 +9,7 @@ class Cell:
 		self.isVisited = False
 		self.dijkstraDist = sys.maxsize
 		self.dijkstraPrev = None
+		self.aStarDist = 0
 		self.solutionVisited = False
 		self.isWall = False
 		self.height = scale

@@ -65,8 +65,6 @@ class Depth_First_Search:
 class Dijkstra:
 	def __init__(self, maze):
 		self.maze = maze
-		self.shortestStack = []
-		self.endDijkstra = None
 		self.dijkstra()
 		self.get_shortest()
 
@@ -89,7 +87,6 @@ class Dijkstra:
 			current = q.pop(0)
 			current.solutionVisited = True
 			if (current == self.maze.endCell):
-				self.endDijkstra = current
 				break
 			else:
 				for cell in current.adjacent:
@@ -97,6 +94,43 @@ class Dijkstra:
 						continue
 					else:
 						temp = current.dijkstraDist + 1
+						if (temp < cell.dijkstraDist):
+							cell.dijkstraDist = temp
+							cell.dijkstraPrev = current
+
+class AStar:
+	def __init__(self, maze):
+		self.maze = maze
+		self.a_star()
+		self.get_shortest()
+
+
+	def get_shortest(self):
+		current = self.maze.endCell
+		while (current != self.maze.cellList[0][0]):
+			current.color = self.maze.yellow
+			current = current.dijkstraPrev
+
+	def a_star(self):
+		self.maze.currentCell.dijkstraDist = 0
+		q = []
+		for r in self.maze.cellList:
+			for c in r:
+				current = c
+				if (c.isWall == False):
+					q.append(current)
+		while(len(q) != 0):
+			q.sort()
+			current = q.pop(0)
+			current.solutionVisited = True
+			if (current == self.maze.endCell):
+				break
+			else:
+				for cell in current.adjacent:
+					if (cell.solutionVisited == True):
+						continue
+					else:
+						temp = current.dijkstraDist + 1 + current.aStarDist
 						if (temp < cell.dijkstraDist):
 							cell.dijkstraDist = temp
 							cell.dijkstraPrev = current

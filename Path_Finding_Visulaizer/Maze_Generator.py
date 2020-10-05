@@ -4,6 +4,7 @@
 import pygame
 import time
 import random
+import math
 from Cell import Cell
 random.seed()
 
@@ -133,7 +134,9 @@ class Maze:
 		return self.numCellsVisited < self.rows*self.cols*.98
 	
 	#initializes adjacencies of each cell
-	def set_adjacenties(self, cell):
+	def set_adjacenties_and_dist(self, cell):
+		dist = math.sqrt((cell.x ** 2)+(cell.y ** 2))
+		cell.aStarDist = dist
 		if(cell.x != self.cols-1) and (not self.cellList[cell.x+1][cell.y].isWall): # right
 			cell.adjacent.append(self.cellList[cell.x+1][cell.y])
 		if(cell.x != 0) and (not self.cellList[cell.x-1][cell.y].isWall): # left
@@ -177,7 +180,7 @@ class Maze:
 		for r in self.cellList:
 			for c in r:
 				if(c.isWall == False):
-					self.set_adjacenties(c)
+					self.set_adjacenties_and_dist(c)
 	# draws the maze using the pygame module
 	def draw_maze(self):
 
