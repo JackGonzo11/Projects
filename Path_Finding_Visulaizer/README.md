@@ -121,6 +121,4 @@ Jack Gonzales:
 
 Jack Gonzo11@gmail.com
 
-407-919-5302
-
 [LinkedIn](https://www.linkedin.com/in/jackgonzales112/)
