@@ -3,24 +3,24 @@ This folder contains a maze generation program and pathfinding visualizer. The m
 
 ## Installation
 This code ran on a windows based system, but cna be easily transferable to other OS's. 
-The code in this folder runs on Python version 3.7.7, which can be downloaded here [Python 3.7.7](https://www.python.org/downloads/release/python-377/)
+The code runs on Python version 3.7.7, which can be downloaded here [Python 3.7.7](https://www.python.org/downloads/release/python-377/)
 This program also ustalizes the Python library Pygame, which can be installed using the pip tool, (automatically installed with Python installation). To install pygame simple copy the following line into the terminal.
- '''bash
+ ```bash
  python -m pip install -U pygame --user
- '''
+ ```
  Finally, you can simple clone the github code via the internet or within the command line using
- '''bash
+ ```bash
  git clone "repo url"
- '''
+ ```
  Once all the steps above are done, you can navigate to the file in your terminal and run the sample codes using either
- '''bash
+ ```bash
 python Sample_Maze
 python Sample_Algorithm
- '''
+ ```
 
 ## Files
 Cell:
-	This file contains the class Cell. The maze is generated on a tile map with each tile being represented by a Cell.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This file contains the class Cell. The maze is generated on a tile map with each tile being represented by a Cell.
 
 Maze_Generator:
 	This file contains the class Maze, which contains functions that creates a maze via recursive backtracking using a stack.
