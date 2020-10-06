@@ -19,11 +19,9 @@ python Sample_Algorithm
  ```
 
 ## Files
-Cell:
+Cell:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This file contains the class Cell. The maze is generated on a tile map with each tile being represented by a Cell.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This file contains the class Cell. The maze is generated on a tile map with each tile being represented by a Cell.
-
-Maze_Generator:	This file contains the class Maze, which contains functions that creates a maze via recursive backtracking using a stack.
+Maze_Generator:		This file contains the class Maze, which contains functions that creates a maze via recursive backtracking using a stack.
 
 Algorithm_Examples:
 	This file contains the class definitions of Deapth_First_Search, Dijkstras, and AStar. All of these class take a maze as an argument and apply their respective pathfinding algorithms to the maze. 
