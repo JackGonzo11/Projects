@@ -119,6 +119,6 @@ This file contains a simple python script that asks the user for 3 inputs. The f
 ## Contributors
 Jack Gonzales:
 
-Jack Gonzo11@gmail.com
+JackGonzo11@gmail.com
 
 [LinkedIn](https://www.linkedin.com/in/jackgonzales112/)
