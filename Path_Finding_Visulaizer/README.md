@@ -19,25 +19,17 @@ python Sample_Algorithm
  ```
 
 ## Files
-Cell:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This file contains the class Cell. The maze is generated on a tile map with each tile being represented by a Cell.
+Cell:	This file contains the class Cell. The maze is generated on a tile map with each tile being represented by a Cell.
 
 Maze_Generator:		This file contains the class Maze, which contains functions that creates a maze via recursive backtracking using a stack.
 
-Algorithm_Examples:
-	This file contains the class definitions of Deapth_First_Search, Dijkstras, and AStar. All of these class take a maze as an argument and apply their respective pathfinding algorithms to the maze. 
-Sample_Maze:
-	This file contains a simple python script that asks the user for 2 inputs. 
-	The first is how big you want the maze to be in terms of rows and columns. 
-		EX. If you input 50... it would generate a 50x50 maze
-	The second is how big you want the window to be in terms of pixels.
-		EX. If you enter 1000... it would generate a window of 1000x1000.
-Sample_Algorithm:
-	This file contains a simple python script that asks the user for 3 inputs.
-	The first is which algorithm you would like to see solve the maze.
-	The second is how big you want the maze to be in terms of rows and columns. 
-		EX. If you input 50... it would generate a 50x50 maze
-	The third is how big you want the window to be in terms of pixels.
-		EX. If you enter 1000... it would generate a window of 1000x1000. 
+Algorithm_Examples:		This file contains the class definitions of Deapth_First_Search, Dijkstras, and AStar. All of these class take a maze as an argument and apply their respective pathfinding algorithms to the maze. 
+
+
+Sample_Maze:	This file contains a simple python script that asks the user for 2 inputs. The first is how big you want the maze to be in terms of rows and columns. EX. If you input 50... it would generate a 50x50 maze. The second is how big you want the window to be in terms of pixels. EX. If you enter 1000... it would generate a window of 1000x1000.
+
+Sample_Algorithm: This file contains a simple python script that asks the user for 3 inputs. The first is which algorithm you would like to see solve the maze. The second is how big you want the maze to be in terms of rows and columns. EX. If you input 50... it would generate a 50x50 maze. The third is how big you want the window to be in terms of pixels. EX. If you enter 1000... it would generate a window of 1000x1000. 
+
 WARNING: Try to make the inputs divisible by each other to ensure that the maze looks nice and 		maintains its square appearance. Also note the ratio of your current moniter, if choosing a 	window size of 2000x2000, The maze will be cut off. Try to stick to <= 1000.
 
 ## Pseudo code
