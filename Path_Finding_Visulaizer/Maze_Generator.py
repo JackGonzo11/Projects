@@ -10,10 +10,10 @@ random.seed()
 
 
 class Maze:
-	def __init__(self, r):
+	def __init__(self, r, window_size):
 		# Maze window specs
-		self.width = 1000                   
-		self.height = 1000
+		self.width = window_size                   
+		self.height = window_size
 		self.pygameScreen = pygame.display.set_mode((self.width, self.height))
 
 		# define colors
@@ -27,7 +27,7 @@ class Maze:
 		# define the Maze variables
 		self.rows = r
 		self.cols = r
-		self.cellList = [[Cell(y,x,(1000/self.cols)) for x in range(self.cols)] for y in range(self.rows)]
+		self.cellList = [[Cell(y,x,(window_size/self.cols)) for x in range(self.cols)] for y in range(self.rows)]
 		self.stack = []
 		self.currentCell = self.cellList[0][0]
 		self.endCell = self.cellList[self.rows-1][self.cols-1]
@@ -64,12 +64,12 @@ class Maze:
 						self.cellList[cell.x-1][cell.y].isVisited = True							# marks cell to the left as visited
 						self.numCellsVisited += 1													# increment numCellsVisited
 						self.cellList[cell.x-1][cell.y].isWall = True								# makes the cell to the left a wall
-						self.cellList[cell.x-1][cell.y].solutionVisited = True
+						self.cellList[cell.x-1][cell.y].solutionVisited = True						# marks the wall as visited in the solution
 
 				if(cell.x != self.cols-1) and (self.cellList[cell.x+1][cell.y].isVisited == False):	# (checks to see if the cell is on the far left side) and (checks to see if the cell to the right has been visited)
 						self.cellList[cell.x+1][cell.y].isVisited = True							# marks cell to the right as visited
 						self.numCellsVisited += 1													# increment numCellsVisited
-						self.cellList[cell.x+1][cell.y].solutionVisited = True
+						self.cellList[cell.x+1][cell.y].solutionVisited = True						# marks the wall as visited in the solution
 						self.cellList[cell.x+1][cell.y].isWall = True								# makes the cell to the right a wall
 				self.currentCell = self.cellList[cell.x][cell.y-1]									# moves current cell
 				self.stack.append(self.currentCell)													# append current cell to stack
@@ -84,12 +84,12 @@ class Maze:
 						self.cellList[cell.x][cell.y-1].isVisited = True							# marks cell above as visited
 						self.numCellsVisited += 1													# increment numCellsVisited
 						self.cellList[cell.x][cell.y-1].isWall = True								# makes the cell above a wall
-						self.cellList[cell.x][cell.y-1].solutionVisited = True
+						self.cellList[cell.x][cell.y-1].solutionVisited = True						# marks the wall as visited in the solution
 
 				if(cell.y != self.rows-1) and (self.cellList[cell.x][cell.y+1].isVisited == False):	# (checks if the cell is on the bottom row) and (checks if the cell below is visited)
 						self.cellList[cell.x][cell.y+1].isVisited = True							# marks cell below as visited
 						self.numCellsVisited += 1													# increment numCellsVisited
-						self.cellList[cell.x][cell.y+1].solutionVisited = True
+						self.cellList[cell.x][cell.y+1].solutionVisited = True						# marks the wall as visited in the solution
 						self.cellList[cell.x][cell.y+1].isWall = True								# makes the cell below a wall
 				self.currentCell = self.cellList[cell.x+1][cell.y]									# moves current cell
 				self.stack.append(self.currentCell)													
@@ -104,12 +104,12 @@ class Maze:
 						self.cellList[cell.x-1][cell.y].isVisited = True							# marks cell to the left as visited
 						self.numCellsVisited += 1													# increment numCellsVisited
 						self.cellList[cell.x-1][cell.y].isWall = True								# makes the cell to the left a wall
-						self.cellList[cell.x-1][cell.y].solutionVisited = True
+						self.cellList[cell.x-1][cell.y].solutionVisited = True						# marks the wall as visited in the solution
 
 				if(cell.x != self.cols-1) and (self.cellList[cell.x+1][cell.y].isVisited == False): # (checks if the cell is on the far right side) and (checks if the cell to the right is visited)
 						self.cellList[cell.x+1][cell.y].isVisited = True							# marks cell to the right as visited
 						self.numCellsVisited += 1													# increment numCellsVisited
-						self.cellList[cell.x+1][cell.y].solutionVisited = True
+						self.cellList[cell.x+1][cell.y].solutionVisited = True						# marks the wall as visited in the solution
 						self.cellList[cell.x+1][cell.y].isWall = True								# makes the cell to the right a wall
 				self.currentCell = self.cellList[cell.x][cell.y+1]									# moves current cell
 				self.stack.append(self.currentCell)
@@ -137,13 +137,13 @@ class Maze:
 	def set_adjacenties_and_dist(self, cell):
 		dist = math.sqrt((cell.x ** 2)+(cell.y ** 2))
 		cell.aStarDist = dist
-		if(cell.x != self.cols-1) and (not self.cellList[cell.x+1][cell.y].isWall): # right
+		if(cell.x != self.cols-1) and (not self.cellList[cell.x+1][cell.y].isWall): # checks if the cell to the right is on the edge and is not a wall
 			cell.adjacent.append(self.cellList[cell.x+1][cell.y])
-		if(cell.x != 0) and (not self.cellList[cell.x-1][cell.y].isWall): # left
+		if(cell.x != 0) and (not self.cellList[cell.x-1][cell.y].isWall): # checks if the cell to the left is on the edge and is not a wall
 			cell.adjacent.append(self.cellList[cell.x-1][cell.y])
-		if(cell.y != self.rows-1) and (not self.cellList[cell.x][cell.y+1].isWall): # down
+		if(cell.y != self.rows-1) and (not self.cellList[cell.x][cell.y+1].isWall): # checks if the cell below is on the edge and is not a wall
 			cell.adjacent.append(self.cellList[cell.x][cell.y+1])
-		if(cell.y != 0) and (not self.cellList[cell.x][cell.y-1].isWall): # above
+		if(cell.y != 0) and (not self.cellList[cell.x][cell.y-1].isWall): # checks if the cell above is on the edge and is not a wall
 			cell.adjacent.append(self.cellList[cell.x][cell.y-1])
 	
 	# Initializes all of the cells and creates a path
@@ -177,14 +177,16 @@ class Maze:
 				self.move_left(self.currentCell)
 				self.move_left(self.currentCell)
 
+		#loop through all the cells and set their adjacencies
 		for r in self.cellList:
 			for c in r:
 				if(c.isWall == False):
 					self.set_adjacenties_and_dist(c)
+
 	# draws the maze using the pygame module
 	def draw_maze(self):
 
 		for r in self.cellList:
 			for c in r:
 				if (c.isWall == False):
-					pygame.draw.rect(self.pygameScreen, c.color, (c.x*(1000/self.rows), c.y*(1000/self.cols), c.width, c.width))
+					pygame.draw.rect(self.pygameScreen, c.color, (c.x*(self.height/self.rows), c.y*(self.width/self.cols), c.width, c.width))
