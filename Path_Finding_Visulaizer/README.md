@@ -39,7 +39,7 @@ This file contains a simple python script that asks the user for 3 inputs. The f
  Try to make the inputs divisible by each other to ensure that the maze looks nice and 		maintains its square appearance. Also note the ratio of your current moniter, if choosing a 	window size of 2000x2000, The maze will be cut off. Try to stick to <= 1000.
 
 ## Pseudo code
-Deapth First Search:
+**Deapth First Search:**
 <ol>
 <li>Let S be a stack</li>
 <li>Push starting cell onto S</li>
@@ -54,7 +54,8 @@ Deapth First Search:
 </ol>
 </ol>
 
-Dijkstra's:
+
+**Dijkstra's:**
 <ol>
 <li>Create vertex set Q</li>
 <li>For each node in maze</li>
@@ -75,6 +76,37 @@ Dijkstra's:
 <li>For each adjacent cell</li>
 <ol>
 <li>Temp = Current.dijkstraDist + 1</li>
+<li>If Temp < cell.dijkstraDist</li>
+<ol>
+<li>cell.dijkstraDist = Temp</li>
+<li>cell.dijkstraPrev = Current</li>
+</ol>
+</ol>
+</ol>
+</ol>
+
+
+**AStar:**
+<ol>
+<li>Create vertex set Q</li>
+<li>For each node in maze</li>
+<ol>
+<li>Append node to Q</li>
+</ol>
+<li>startNode.DijkstraDist = 0</li>
+<li>While Q is not empty</li>
+<ol>
+<li>Current = node in Q with minimum distance</li>
+<li>Remove current from Q</li>
+<li>If Current = maze.endcell</li>
+<ol>
+<li>Break</li>
+</ol>
+<li>Else</li>
+<ol>
+<li>For each adjacent cell</li>
+<ol>
+<li>Temp = Current.dijkstraDist + 1 + Distance from cell to Endcell</li>
 <li>If Temp < cell.dijkstraDist</li>
 <ol>
 <li>cell.dijkstraDist = Temp</li>
