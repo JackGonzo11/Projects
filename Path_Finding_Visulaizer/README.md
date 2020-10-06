@@ -10,7 +10,7 @@ This program also ustalizes the Python library Pygame, which can be installed us
  ```
  Finally, you can simple clone the github code via the internet or within the command line using
  ```bash
- git clone "repo url"
+ git clone https://github.com/JackGonzo11/Projects.git
  ```
  Once all the steps above are done, you can navigate to the file in your terminal and run the sample codes using either
  ```bash
@@ -20,6 +20,7 @@ python Sample_Algorithm
 
 ## Files
 Cell:
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This file contains the class Cell. The maze is generated on a tile map with each tile being represented by a Cell.
 
 Maze_Generator:
