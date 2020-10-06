@@ -51,6 +51,8 @@ Deapth First Search:
 <li>Else if the cell can move left, move left </li>
 <li>Else if the cell can move up, move up </li>
 <li>Else... pop top cell in stack </li>
+</ol>
+</ol>
 
 Dijkstra's:
 <ol>
