@@ -41,16 +41,46 @@ This file contains a simple python script that asks the user for 3 inputs. The f
 ## Pseudo code
 Deapth First Search:
 <ol>
-<li>1. Let S be a stack</li>
-<li>2. Push starting cell onto S</li>
-<li>3. While the top of S is not endCell</li>
+<li>Let S be a stack</li>
+<li>Push starting cell onto S</li>
+<li>While the top of S is not endCell</li>
 <ol>
-<li>a) Pop the top of the stack </li>
-<li>b) if the cell can move right, move right</li>
-<li>c) else if the cell can move down, move down </li>
-<li>d) else if the cell can move left, move left </li>
-<li>e) else if the cell can move up, move up </li>
-<li>f) else... pop top cell in stack </li>
+<li>Pop the top of the stack </li>
+<li>If the cell can move right, move right</li>
+<li>Else if the cell can move down, move down </li>
+<li>Else if the cell can move left, move left </li>
+<li>Else if the cell can move up, move up </li>
+<li>Else... pop top cell in stack </li>
+
+Dijkstra's:
+<ol>
+<li>Create vertex set Q</li>
+<li>For each node in maze</li>
+<ol>
+<li>Append node to Q</li>
+</ol>
+<li>startNode.DijkstraDist = 0</li>
+<li>While Q is not empty</li>
+<ol>
+<li>Current = node in Q with minimum distance</li>
+<li>Remove current from Q</li>
+<li>If Current = maze.endcell</li>
+<ol>
+<li>Break</li>
+</ol>
+<li>Else</li>
+<ol>
+<li>For each adjacent cell</li>
+<ol>
+<li>Temp = Current.dijkstraDist + 1</li>
+<li>If Temp < cell.dijkstraDist</li>
+<ol>
+<li>cell.dijkstraDist = Temp</li>
+<li>cell.dijkstraPrev = Current</li>
+</ol>
+</ol>
+</ol>
+</ol>
 
 ## Contributors
 Jack Gonzales:
