@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from python_utils import converters
 from datetime import date
 
-currentDate = "2022-03-29"
+currentDate = "2022-03-30"
 
 def get_parsed_page(url):
     # This fixes a blocked by cloudflare error i've encountered
@@ -112,6 +112,45 @@ def get_player_info(player_id):
 
     return player_info
 
+
+
+def get_player_IDS(string):
+    playerList = []
+    newString = string
+    for x in range(5):
+        startPointer = newString.find("href=\"/stats/players/")
+        stopPointer = newString.find("/", startPointer+21)
+        playerID = newString[startPointer + 21:stopPointer]
+        newString = newString[stopPointer:]
+        startPointer = newString.find("href=\"/stats/players/")
+        stopPointer = newString.find("/", startPointer + 21)
+        newString = newString[stopPointer:]
+        playerList.append(playerID)
+    return playerList
+
+def get_player_stats(page):
+    words = page.find_all("div", {"class": "stats-section"})
+    listOfPlayerIDs = get_player_IDS(str(words))
+    ids = {}
+    ids[listOfPlayerIDs[0]] = get_player_info(listOfPlayerIDs[0])
+    ids[listOfPlayerIDs[1]] = get_player_info(listOfPlayerIDs[1])
+    ids[listOfPlayerIDs[2]] = get_player_info(listOfPlayerIDs[2])
+    ids[listOfPlayerIDs[3]] = get_player_info(listOfPlayerIDs[3])
+    ids[listOfPlayerIDs[4]] = get_player_info(listOfPlayerIDs[4])
+    return ids
+
+
+def get_team_rank(teamID, teamName):
+    name = teamName[2:len(teamName)-1]
+    page = get_parsed_page("https://www.hltv.org/team/" + teamID + "/" + teamName)
+    html = str(page.find_all("div", {"class": "profile-team-stat"}))
+    startPointer = html.find("#")
+    stopPointer = html.find("<", startPointer)
+    rank = html[startPointer+1:stopPointer]
+    return rank
+
+
+
 def get_team_info(teamid):
     """
     :param teamid: integer (or string consisting of integers)
@@ -121,13 +160,14 @@ def get_team_info(teamid):
     page = get_parsed_page("http://www.hltv.org/?pageid=179&teamid=" + str(teamid))
 
     team_info = {}
-    team_info['team-name']=page.find("div", {"class": "context-item"}).text.encode('utf8')
+    team_info['team-name'] = page.find("div", {"class": "context-item"}).text.encode('utf8')
+    team_info['rank'] = get_team_rank(teamid, str(team_info['team-name']))
 
     current_lineup = _get_current_lineup(page.find_all("div", {"class": "col teammate"}))
     team_info['current-lineup'] = current_lineup
 
-    historical_players = _get_historical_lineup(page.find_all("div", {"class": "col teammate"}))
-    team_info['historical-players'] = historical_players
+    #historical_players = _get_historical_lineup(page.find_all("div", {"class": "col teammate"}))
+    #team_info['historical-players'] = historical_players
 
     team_stats_columns = page.find_all("div", {"class": "columns"})
     team_stats = {}
@@ -141,6 +181,8 @@ def get_team_info(teamid):
             team_stats[stat_title] = stat_value
 
     team_info['stats'] = team_stats
+
+    team_info['playerStats'] = get_player_stats(page)
 
     return team_info
 
@@ -255,6 +297,19 @@ def get_current_date():
     return d
 
 
+def get_team_ID(string, team):
+    if team == 'team1':
+        starter = string.find("team1=")
+        stopper = string.find("\"", starter+7)
+        result = string[starter+7:stopper]
+        return result
+    else:
+        starter = string.find("team2=")
+        stopper = string.find("\"", starter + 7)
+        result = string[starter + 7:stopper]
+        return result
+
+
 def get_todays_matches():
     matches = get_parsed_page("http://www.hltv.org/matches/")
     matches_list = []
@@ -277,11 +332,13 @@ def get_todays_matches():
 
             if (getMatch.find_all("div", {"class": "matchTeams"})):
                 matchObj['team1'] = getMatch.find_all("div", {"class": "matchTeam"})[0].text.encode('utf8').lstrip().rstrip()
+                matchObj['team1ID'] = get_team_ID(str(getMatch),'team1')
                 matchObj['team2'] = getMatch.find_all("div", {"class": "matchTeam"})[1].text.encode('utf8').lstrip().rstrip()
+                matchObj['team2ID'] = get_team_ID(str(getMatch),'team2')
             else:
                 matchObj['team1'] = None
                 matchObj['team2'] = None
-            if(date == get_current_date()):
+            if(date == currentDate):
                 matches_list.append(matchObj)
 
     return matches_list
