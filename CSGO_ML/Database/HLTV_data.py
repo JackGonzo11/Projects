@@ -3,7 +3,9 @@ import requests
 import datetime
 from bs4 import BeautifulSoup
 from python_utils import converters
+from datetime import date
 
+currentDate = "2022-03-29"
 
 def get_parsed_page(url):
     # This fixes a blocked by cloudflare error i've encountered
@@ -246,6 +248,44 @@ def get_matches():
 
     return matches_list
 
+
+def get_current_date():
+    today = date.today()
+    d = today.strftime("%Y-%m-%d")
+    return d
+
+
+def get_todays_matches():
+    matches = get_parsed_page("http://www.hltv.org/matches/")
+    matches_list = []
+    upcomingmatches = matches.find("div", {"class": "upcomingMatchesSection"})
+
+    matchdays = matches.find_all("div", {"class": "upcomingMatchesSection"})
+
+    for match in matchdays:
+        matchDetails = match.find_all("div", {"class": "upcomingMatch"})
+        date = match.find({'span': {'class': 'matchDayHeadline'}}).text.split()[-1]
+        for getMatch in matchDetails:
+            matchObj = {}
+
+            matchObj['date'] = date
+            matchObj['time'] = getMatch.find("div", {"class": "matchTime"}).text
+            if getMatch.find("div", {"class": "matchEvent"}):
+                matchObj['event'] = getMatch.find("div", {"class": "matchEvent"}).text.encode('utf8').strip()
+            else:
+                matchObj['event'] = getMatch.find("div", {"class": "matchInfoEmpty"}).text.encode('utf8').strip()
+
+            if (getMatch.find_all("div", {"class": "matchTeams"})):
+                matchObj['team1'] = getMatch.find_all("div", {"class": "matchTeam"})[0].text.encode('utf8').lstrip().rstrip()
+                matchObj['team2'] = getMatch.find_all("div", {"class": "matchTeam"})[1].text.encode('utf8').lstrip().rstrip()
+            else:
+                matchObj['team1'] = None
+                matchObj['team2'] = None
+            if(date == get_current_date()):
+                matches_list.append(matchObj)
+
+    return matches_list
+
 def get_results():
     results = get_parsed_page("http://www.hltv.org/results/")
 
@@ -327,3 +367,4 @@ def get_results_by_date(start_date, end_date):
             break
 
     return results_list
+
