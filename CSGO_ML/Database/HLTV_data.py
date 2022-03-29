@@ -150,7 +150,6 @@ def get_team_rank(teamID, teamName):
     return rank
 
 
-
 def get_team_info(teamid):
     """
     :param teamid: integer (or string consisting of integers)
