@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from python_utils import converters
 from datetime import date
 
-currentDate = "2022-03-30"
+currentDate = "2022-03-31"
 
 def get_parsed_page(url):
     # This fixes a blocked by cloudflare error i've encountered
@@ -293,6 +293,7 @@ def get_matches():
 def get_current_date():
     today = date.today()
     d = today.strftime("%Y-%m-%d")
+    print("get_current(): " + d)
     return d
 
 
@@ -319,6 +320,7 @@ def get_todays_matches():
     for match in matchdays:
         matchDetails = match.find_all("div", {"class": "upcomingMatch"})
         date = match.find({'span': {'class': 'matchDayHeadline'}}).text.split()[-1]
+        print("date on website: "+date)
         for getMatch in matchDetails:
             matchObj = {}
 
