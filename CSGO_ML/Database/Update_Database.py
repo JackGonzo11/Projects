@@ -11,7 +11,6 @@ def create_game(match):
     matchData = []
 
 
-
 statistics = {'Team A: rank': [],
               'Team A: Amount players in top 30': [],
               'Team A: average age': [],
