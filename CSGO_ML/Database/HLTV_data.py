@@ -5,11 +5,7 @@ from bs4 import BeautifulSoup
 from python_utils import converters
 from datetime import date
 
-<<<<<<< HEAD
-currentDate = "2022-03-31"
-=======
 currentDate = "2022-04-04"
->>>>>>> e50f74fbc8ab1e2fb71c82d561dfc0892cb7bb2f
 
 def get_parsed_page(url):
     # This fixes a blocked by cloudflare error i've encountered
@@ -152,9 +148,38 @@ def get_team_rank(teamID, teamName):
     stopPointer = html.find("<", startPointer)
     teamRank = html[startPointer+1:stopPointer]
     if len(teamRank) > 10:
-        rank = 300
+        # team is unranked
+        rank = 0
+    elif int(teamRank) < 11:
+        rank = 1
+    elif int(teamRank) < 21:
+        rank = 2
+    elif int(teamRank) < 31:
+        rank = 3
+    elif int(teamRank) < 41:
+        rank = 4
+    elif int(teamRank) < 51:
+        rank = 5
+    elif int(teamRank) < 61:
+        rank = 6
+    elif int(teamRank) < 71:
+        rank = 7
+    elif int(teamRank) < 81:
+        rank = 8
+    elif int(teamRank) < 91:
+        rank = 9
+    elif int(teamRank) < 101:
+        rank = 10
+    elif int(teamRank) < 151:
+        rank = 11
+    elif int(teamRank) < 201:
+        rank = 12
+    elif int(teamRank) < 251:
+        rank = 13
+    elif int(teamRank) < 301:
+        rank = 14
     else:
-        rank = teamRank
+        rank = 15
     return rank
 
 
@@ -301,7 +326,6 @@ def get_matches():
 def get_current_date():
     today = date.today()
     d = today.strftime("%Y-%m-%d")
-    print("get_current(): " + d)
     return d
 
 
@@ -328,7 +352,6 @@ def get_todays_matches():
     for match in matchdays:
         matchDetails = match.find_all("div", {"class": "upcomingMatch"})
         date = match.find({'span': {'class': 'matchDayHeadline'}}).text.split()[-1]
-        print("date on website: "+date)
         for getMatch in matchDetails:
             matchObj = {}
 
