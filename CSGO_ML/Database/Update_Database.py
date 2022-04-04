@@ -4,13 +4,15 @@ import pandas as pd
 
 matches = get_todays_matches()
 
-pprint(get_team_info(matches[1]['team1ID']))
+#pprint(get_team_info(matches[1]['team1ID']))
 
 
 def create_game(match):
     matchData = []
+    pprint(get_team_info(matches[0]))
 
 
+create_game(matches[0])
 statistics = {'Team A: rank': [],
               'Team A: Amount players in top 30': [],
               'Team A: average age': [],
