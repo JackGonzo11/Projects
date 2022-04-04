@@ -1,5 +1,5 @@
 from prettyprinter import pprint
-from Database.HLTV_data import *
+from HLTV_data import *
 import pandas as pd
 
 matches = get_todays_matches()
@@ -9,7 +9,8 @@ matches = get_todays_matches()
 
 def create_game(match):
     matchData = []
-    pprint(get_team_info(matches[0]))
+    teamA = get_team_info(matches[0]['team1ID'])
+    teamB = get_team_info(matches[1]['team1ID'])
 
 
 create_game(matches[0])
@@ -48,6 +49,6 @@ statistics = {'Team A: rank': [],
               'Team B: average saved teammates per round': [],
               'Team B: average rating': [],
               'Outcome': []}
-df = pd.read_csv('Database/database.csv')
-df.loc[len(df.index)] = [0]
-df.to_csv('Database/database.csv')
+#df = pd.read_csv('Database/database.csv')
+#df.loc[len(df.index)] = [0]
+#df.to_csv('Database/database.csv')

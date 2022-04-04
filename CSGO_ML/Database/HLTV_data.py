@@ -142,8 +142,6 @@ def get_player_stats(page):
 
 def get_team_rank(teamID, teamName):
     name = teamName[2:len(teamName)-1]
-    print(name)
-    print(teamID)
     page = get_parsed_page("https://www.hltv.org/team/" + teamID + "/" + name)
     html = str(page.find_all("div", {"class": "profile-team-stat"}))
     startPointer = html.find("#")
