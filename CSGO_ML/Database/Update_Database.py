@@ -4,10 +4,10 @@ import pandas as pd
 
 matches = get_todays_matches()
 
-<<<<<<< HEAD
+
 pprint(matches)
 #pprint(get_team_info(matches[0]['team1ID']))
-=======
+
 #pprint(get_team_info(matches[1]['team1ID']))
 
 
