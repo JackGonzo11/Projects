@@ -5,7 +5,11 @@ from bs4 import BeautifulSoup
 from python_utils import converters
 from datetime import date
 
+<<<<<<< HEAD
 currentDate = "2022-03-31"
+=======
+currentDate = "2022-04-04"
+>>>>>>> e50f74fbc8ab1e2fb71c82d561dfc0892cb7bb2f
 
 def get_parsed_page(url):
     # This fixes a blocked by cloudflare error i've encountered
@@ -142,11 +146,15 @@ def get_player_stats(page):
 
 def get_team_rank(teamID, teamName):
     name = teamName[2:len(teamName)-1]
-    page = get_parsed_page("https://www.hltv.org/team/" + teamID + "/" + teamName)
+    page = get_parsed_page("https://www.hltv.org/team/" + teamID + "/" + name)
     html = str(page.find_all("div", {"class": "profile-team-stat"}))
     startPointer = html.find("#")
     stopPointer = html.find("<", startPointer)
-    rank = html[startPointer+1:stopPointer]
+    teamRank = html[startPointer+1:stopPointer]
+    if len(teamRank) > 10:
+        rank = 300
+    else:
+        rank = teamRank
     return rank
 
 
