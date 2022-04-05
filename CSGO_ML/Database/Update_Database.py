@@ -2,9 +2,7 @@ from prettyprinter import pprint
 from HLTV_data import *
 from statistics import mean
 import pandas as pd
-
-matches = get_todays_matches()
-
+import time
 
 def isolate_personal_player_data(team, dataType):
     lst = []
@@ -22,24 +20,119 @@ def isolate_statistical_player_data(team, stat):
     for player in players.keys():
         for j in players[player]['stats'].keys():
             if j == stat:
-                lst.append(int(players[player]['stats'][j]))
+                num = players[player]['stats'][j]
+                if len(num) > 4 and num[4] == '%':
+                    lst.append(float(num[0:4]))
+                else:
+                    try:
+                        lst.append(int(num))
+                    except ValueError:
+                        lst.append(float(num))
     return lst
 
 
 def create_game(match):
     matchData = []
-    teamA = get_team_info(matches[0]['team1ID'])
+    teamA = get_team_info(match['team1ID'])
     pprint(teamA)
-    teamB = get_team_info(matches[1]['team1ID'])
+    time.sleep(3)
+    teamB = get_team_info(match['team2ID'])
+
     matchData.append(teamA['rank'])
+
     ages = isolate_personal_player_data(teamA, 'age')
     matchData.append(mean(ages))
+
     totalKills = isolate_statistical_player_data(teamA, 'total_kills')
     matchData.append(mean(totalKills))
-    pprint(totalKills)
-    pprint(mean(totalKills))
 
+    hspercentage = isolate_statistical_player_data(teamA, 'headshot_percent')
+    matchData.append(mean(hspercentage))
 
+    totalDeaths = isolate_statistical_player_data(teamA, 'total_deaths')
+    matchData.append(mean(totalDeaths))
+
+    kdr = isolate_statistical_player_data(teamA, 'kd_ratio')
+    matchData.append(mean(kdr))
+
+    damage = isolate_statistical_player_data(teamA, 'dmg_per_round')
+    matchData.append(mean(damage))
+
+    grenadeDmg = isolate_statistical_player_data(teamA, 'grenade_dmg_per_round')
+    matchData.append(mean(grenadeDmg))
+
+    mapsPlayed = isolate_statistical_player_data(teamA, 'maps_played')
+    matchData.append(mean(mapsPlayed))
+
+    roundsPlayed = isolate_statistical_player_data(teamA, 'rounds_played')
+    matchData.append(mean(roundsPlayed))
+
+    killsPerRound = isolate_statistical_player_data(teamA, 'kills_per_round')
+    matchData.append(mean(killsPerRound))
+
+    assistsPerRound = isolate_statistical_player_data(teamA, 'assists_per_round')
+    matchData.append(mean(assistsPerRound))
+
+    deathsPerRound = isolate_statistical_player_data(teamA, 'deaths_per_round')
+    matchData.append(mean(deathsPerRound))
+
+    savedByTeam = isolate_statistical_player_data(teamA, 'saved_by_teammate_per_round')
+    matchData.append(mean(savedByTeam))
+
+    savedTeam = isolate_statistical_player_data(teamA, 'saved_teammates_per_round')
+    matchData.append(mean(savedTeam))
+
+    rating = isolate_statistical_player_data(teamA, 'rating_1')
+    matchData.append(mean(rating))
+
+    matchData.append(teamB['rank'])
+
+    ages = isolate_personal_player_data(teamB, 'age')
+    matchData.append(mean(ages))
+
+    totalKills = isolate_statistical_player_data(teamB, 'total_kills')
+    matchData.append(mean(totalKills))
+
+    hspercentage = isolate_statistical_player_data(teamB, 'headshot_percent')
+    matchData.append(mean(hspercentage))
+
+    totalDeaths = isolate_statistical_player_data(teamB, 'total_deaths')
+    matchData.append(mean(totalDeaths))
+
+    kdr = isolate_statistical_player_data(teamB, 'kd_ratio')
+    matchData.append(mean(kdr))
+
+    damage = isolate_statistical_player_data(teamB, 'dmg_per_round')
+    matchData.append(mean(damage))
+
+    grenadeDmg = isolate_statistical_player_data(teamB, 'grenade_dmg_per_round')
+    matchData.append(mean(grenadeDmg))
+
+    mapsPlayed = isolate_statistical_player_data(teamB, 'maps_played')
+    matchData.append(mean(mapsPlayed))
+
+    roundsPlayed = isolate_statistical_player_data(teamB, 'rounds_played')
+    matchData.append(mean(roundsPlayed))
+
+    killsPerRound = isolate_statistical_player_data(teamB, 'kills_per_round')
+    matchData.append(mean(killsPerRound))
+
+    assistsPerRound = isolate_statistical_player_data(teamB, 'assists_per_round')
+    matchData.append(mean(assistsPerRound))
+
+    deathsPerRound = isolate_statistical_player_data(teamB, 'deaths_per_round')
+    matchData.append(mean(deathsPerRound))
+
+    savedByTeam = isolate_statistical_player_data(teamB, 'saved_by_teammate_per_round')
+    matchData.append(mean(savedByTeam))
+
+    savedTeam = isolate_statistical_player_data(teamB, 'saved_teammates_per_round')
+    matchData.append(mean(savedTeam))
+
+    rating = isolate_statistical_player_data(teamB, 'rating_1')
+    matchData.append(mean(rating))
+
+    return matchData
 
 statistics = {'Team A: rank': [],
               'Team A: average age': [],
@@ -74,8 +167,13 @@ statistics = {'Team A: rank': [],
               'Team B: average saved teammates per round': [],
               'Team B: average rating': [],
               'Outcome': []}
-create_game(matches[0])
-#df = pd.read_csv('Database/database.csv')
-#df.loc[len(df.index)] = [0]
-#df = pd.DataFrame(statistics)
-#df.to_csv('database.csv')
+
+def update_database(db):
+    matches = get_todays_matches()
+    for match in matches:
+        matchData = create_game(match)
+        df.loc[len(df.index)] = matchData
+
+df = pd.read_csv('database.csv')
+update_database(df)
+df.to_csv('database.csv')
