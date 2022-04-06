@@ -1,11 +1,13 @@
 import re
+import time
+
 import requests
 import datetime
 from bs4 import BeautifulSoup
 from python_utils import converters
 from datetime import date
 
-currentDate = "2022-04-05"
+currentDate = "2022-04-07"
 
 def get_parsed_page(url):
     # This fixes a blocked by cloudflare error i've encountered
@@ -193,6 +195,7 @@ def get_team_info(teamid):
 
     team_info = {}
     team_info['team-name'] = page.find("div", {"class": "context-item"}).text.encode('utf8')
+    time.sleep(3)
     team_info['rank'] = get_team_rank(teamid, str(team_info['team-name']))
 
     current_lineup = _get_current_lineup(page.find_all("div", {"class": "col teammate"}))

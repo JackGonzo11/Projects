@@ -31,12 +31,22 @@ def isolate_statistical_player_data(team, stat):
     return lst
 
 
+def get_team_names(match):
+    teamA = match['team1'].decode("utf-8")
+    teamB = match['team2'].decode("utf-8")
+    result = teamA + ' v ' + teamB
+    pprint(result + ' grabbed')
+    return result
+
+
 def create_game(match):
     matchData = []
     teamA = get_team_info(match['team1ID'])
-    pprint(teamA)
     time.sleep(3)
     teamB = get_team_info(match['team2ID'])
+    time.sleep(3)
+
+    matchData.append(get_team_names(match))
 
     matchData.append(teamA['rank'])
 
@@ -132,6 +142,8 @@ def create_game(match):
     rating = isolate_statistical_player_data(teamB, 'rating_1')
     matchData.append(mean(rating))
 
+    matchData.append('undefined')
+
     return matchData
 
 statistics = {'Team A: rank': [],
@@ -176,4 +188,5 @@ def update_database(db):
 
 df = pd.read_csv('database.csv')
 update_database(df)
+#df = pd.DataFrame(statistics)
 df.to_csv('database.csv')
