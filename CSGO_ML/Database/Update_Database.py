@@ -1,6 +1,7 @@
 from prettyprinter import pprint
 from HLTV_data import *
 from statistics import mean
+from datetime import date
 import pandas as pd
 import time
 
@@ -42,9 +43,9 @@ def get_team_names(match):
 def create_game(match):
     matchData = []
     teamA = get_team_info(match['team1ID'])
-    time.sleep(3)
     teamB = get_team_info(match['team2ID'])
-    time.sleep(3)
+
+    matchData.append(date.today())
 
     matchData.append(get_team_names(match))
 
@@ -143,6 +144,7 @@ def create_game(match):
     matchData.append(mean(rating))
 
     matchData.append('undefined')
+    print("adding game to database")
 
     return matchData
 
@@ -184,9 +186,12 @@ def update_database(db):
     matches = get_todays_matches()
     for match in matches:
         matchData = create_game(match)
-        df.loc[len(df.index)] = matchData
+        db.loc[len(df.index)] = matchData
+        db.to_csv('database.csv', index=False)
+        print("added game")
 
 df = pd.read_csv('database.csv')
 update_database(df)
 #df = pd.DataFrame(statistics)
-df.to_csv('database.csv')
+
+print("database update complete")

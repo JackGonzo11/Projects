@@ -1,13 +1,13 @@
 import re
 import time
 
+from prettyprinter import pprint
 import requests
 import datetime
+import arrow
 from bs4 import BeautifulSoup
 from python_utils import converters
 from datetime import date
-
-currentDate = "2022-04-07"
 
 def get_parsed_page(url):
     # This fixes a blocked by cloudflare error i've encountered
@@ -15,8 +15,15 @@ def get_parsed_page(url):
         "referer": "https://www.hltv.org/stats",
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
     }
+    webpage = BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
+    ## this could break at some point
+    while len(webpage) == 7:
+        print("cloudflare blocked request, waiting 90 seconds")
+        time.sleep(90)
+        print("trying again")
+        webpage = BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
 
-    return BeautifulSoup(requests.get(url, headers=headers).text, "lxml")
+    return webpage
 
 
 def top5teams():
@@ -195,9 +202,11 @@ def get_team_info(teamid):
 
     team_info = {}
     team_info['team-name'] = page.find("div", {"class": "context-item"}).text.encode('utf8')
-    time.sleep(3)
-    team_info['rank'] = get_team_rank(teamid, str(team_info['team-name']))
 
+    team_info['rank'] = get_team_rank(teamid, str(team_info['team-name']))
+    print("grabbed team info, waiting for rate limit")
+    time.sleep(5)
+    print("done waiting")
     current_lineup = _get_current_lineup(page.find_all("div", {"class": "col teammate"}))
     team_info['current-lineup'] = current_lineup
 
@@ -373,7 +382,7 @@ def get_todays_matches():
             else:
                 matchObj['team1'] = None
                 matchObj['team2'] = None
-            if(date == currentDate):
+            if(date == get_current_date()):
                 matches_list.append(matchObj)
 
     return matches_list
@@ -416,6 +425,53 @@ def get_results():
                 resultObj['team2'] = None
 
             results_list.append(resultObj)
+
+    return results_list
+
+
+def get_todays_results():
+    results = get_parsed_page("http://www.hltv.org/results/")
+
+    results_list = []
+
+    pastresults = results.find_all("div", {"class": "results-holder"})
+    pastresults = pastresults[1:]
+
+    for result in pastresults:
+        resultDiv = result.find_all("div", {"class": "result-con"})
+
+        for res in resultDiv:
+            getRes = res.find("div", {"class": "result"}).find("table")
+
+            resultObj = {}
+
+            day = res.parent.find("span", {"class": "standard-headline"}).text.encode('utf8')
+            date = day.decode()
+            date = date[12:]
+            format = 'MMMM Do YYYY'
+            date = arrow.get(date, format).format('YYYY-MM-DD')
+            resultObj['date'] = date
+
+            if (res.find("td", {"class": "placeholder-text-cell"})):
+                resultObj['event'] = res.find("td", {"class": "placeholder-text-cell"}).text.encode('utf8')
+            elif (res.find("td", {"class": "event"})):
+                resultObj['event'] = res.find("td", {"class": "event"}).text.encode('utf8')
+            else:
+                resultObj['event'] = None
+
+            if (res.find_all("td", {"class": "team-cell"})):
+                resultObj['team1'] = res.find_all("td", {"class": "team-cell"})[0].text.encode('utf8').lstrip().rstrip()
+                resultObj['team1score'] = converters.to_int(
+                    res.find("td", {"class": "result-score"}).find_all("span")[0].text.encode('utf8').lstrip().rstrip())
+                resultObj['team2'] = res.find_all("td", {"class": "team-cell"})[1].text.encode('utf8').lstrip().rstrip()
+                resultObj['team2score'] = converters.to_int(
+                    res.find("td", {"class": "result-score"}).find_all("span")[1].text.encode('utf8').lstrip().rstrip())
+            else:
+                resultObj['team1'] = None
+                resultObj['team2'] = None
+
+            if day == resultObj[get_current_date()]:
+                results_list.append(resultObj)
 
     return results_list
 
