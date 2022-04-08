@@ -470,7 +470,7 @@ def get_todays_results():
                 resultObj['team1'] = None
                 resultObj['team2'] = None
 
-            if day == resultObj[get_current_date()]:
+            if date == get_current_date():
                 results_list.append(resultObj)
 
     return results_list
